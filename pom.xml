@@ -21,7 +21,6 @@
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
             <version>5.0.1</version>
-            <type>bundle</type>
         </dependency>
 
         <dependency>
