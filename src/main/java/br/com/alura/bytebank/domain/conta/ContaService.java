@@ -56,7 +56,9 @@ public class ContaService {
             throw new RegraDeNegocioException("Valor do deposito deve ser superior a zero!");
         }
 
-        conta.depositar(valor);
+        Connection connect = connection.returnConnection();
+        new ContaDAO(connect).update(conta.getNumero(), valor);
+        
     }
 
     public void encerrar(Integer numeroDaConta) {

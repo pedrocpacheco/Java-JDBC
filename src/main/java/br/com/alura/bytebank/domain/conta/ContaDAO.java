@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 
-
 import br.com.alura.bytebank.domain.cliente.Cliente;
 import br.com.alura.bytebank.domain.cliente.DadosCadastroCliente;
 
@@ -86,5 +85,26 @@ public class ContaDAO {
         return contas;
     }
 
+    public void update(Integer number, BigDecimal value){
+        String sqlString = "UPDATE conta SET saldo = ? WHERE number = ?";
+
+        PreparedStatement preparedStatement;
+
+    try{
+        preparedStatement = connection.prepareStatement(sqlString);
+
+        preparedStatement.setBigDecimal(1, value);
+        preparedStatement.setInt(2, number);
+
+        preparedStatement.execute();
+
+        preparedStatement.close();
+        this.connection.close();
+        
+    } catch(SQLException e){
+        e.printStackTrace();
+    }
+
+    }
 
 }
