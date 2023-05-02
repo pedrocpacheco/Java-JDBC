@@ -21,7 +21,7 @@ public class ContaDAO {
 
     public void save(DadosAberturaConta dadosDaConta){
         var cliente = new Cliente(dadosDaConta.dadosCliente());
-        var conta = new Conta(dadosDaConta.numero(), cliente);
+        var conta = new Conta(dadosDaConta.numero(), BigDecimal.ZERO, cliente);
 
         // 2.6 - Criando o texto que será lançado para adicionar ao DB
         String sql = "INSERT INTO conta(numero, saldo, cliente_nome, cliente_email)" +
@@ -73,7 +73,7 @@ public class ContaDAO {
                 DadosCadastroCliente dadosCliente = new DadosCadastroCliente(listGotted.getString(3), listGotted.getString(4), listGotted.getString(5));
                 
                 // 8- Criamos uma conta, e então adicionamos ela na lista
-                contas.add(new Conta(accountNumber, new Cliente(dadosCliente)));
+                contas.add(new Conta(accountNumber, listGotted.getBigDecimal(2), new Cliente(dadosCliente)));
          
         }
         sqlPrepared.close();
