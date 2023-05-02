@@ -39,6 +39,8 @@ public class ContaDAO {
             prepareStatement.setString(5, dadosDaConta.dadosCliente().email());
 
             prepareStatement.execute();
+            prepareStatement.close();
+            this.connection.close();
         }
         catch(SQLException e){
             e.printStackTrace();
@@ -50,13 +52,17 @@ public class ContaDAO {
         Set<Conta> contas = new HashSet<>();
 
         // 2- Definimos o Texto SQL que será utilizado para pegar todas as contas
-        String sql = "SELECT * FROM conta";
+        String sqlAsString = "SELECT * FROM conta";
+
+        // After- Definindo as variaveis antes para poder fecha-las
+        PreparedStatement sqlPrepared;
+        ResultSet listGotted;
 
         // 3- Bloco Try-Catch obrigatorio
         try{
-            
             // 4- Pegamos o SQL, preparamos em uma Statement, excutamos a Consulta que retorna um ResultList
-            ResultSet listGotted = connection.prepareStatement(sql).executeQuery();
+            sqlPrepared = connection.prepareStatement(sqlAsString);
+            listGotted = sqlPrepared.executeQuery();
 
             // 5- Enquanto a lista recuperada tiver itens, nos adicionamos uma Conta a lista de conta
             while(listGotted.next()){
@@ -71,10 +77,9 @@ public class ContaDAO {
                 contas.add(new Conta(accountNumber, new Cliente(dadosCliente)));
          
         }
-
-        }
-
-        catch(SQLException e){
+        sqlPrepared.close();
+        listGotted.close();
+        } catch(SQLException e){
             e.printStackTrace();
         }
 
