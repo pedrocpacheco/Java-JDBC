@@ -5,9 +5,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 // 2.0- Criar Classe que faz a conexão com o BD
-public class ConectionFactory {
+public class ConnectionFactory{
     
-    public Connection connectToDB(){
+    public Connection returnConnection(){
         //2.1- Usar Classe DrivenManager para pegar a conexão
         try {
             //2.2 - Criar Objeto Connection e salvar um getConnection do DrivenManager
@@ -18,11 +18,6 @@ public class ConectionFactory {
             } catch (SQLException e) {
                 throw new RuntimeException(e);
         }
-    }
-
-    public static void main(String[] args) {
-        ConectionFactory conectionDB = new ConectionFactory();
-        conectionDB.connectToDB();
     }
 
 }

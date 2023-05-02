@@ -1,15 +1,28 @@
 package br.com.alura.bytebank.domain.conta;
 
-import br.com.alura.bytebank.domain.RegraDeNegocioException;
-import br.com.alura.bytebank.domain.cliente.Cliente;
-
 import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ContaService {
+import com.mysql.cj.xdevapi.PreparableStatement;
 
+import br.com.alura.bytebank.ConnectionFactory;
+import br.com.alura.bytebank.domain.RegraDeNegocioException;
+import br.com.alura.bytebank.domain.cliente.Cliente;
+
+public class ContaService {
+   
+    //2.5 - Criar ConnectionFactory na classe
+    private ConnectionFactory connection;
     private Set<Conta> contas = new HashSet<>();
+    
+
+    public ContaService(){
+         this.connection = new ConnectionFactory();
+    }
 
     public Set<Conta> listarContasAbertas() {
         return contas;
@@ -20,14 +33,25 @@ public class ContaService {
         return conta.getSaldo();
     }
 
-    public void abrir(DadosAberturaConta dadosDaConta) {
+    public void abrir(DadosAberturaConta dadosDaConta) throws SQLException {
         var cliente = new Cliente(dadosDaConta.dadosCliente());
         var conta = new Conta(dadosDaConta.numero(), cliente);
         if (contas.contains(conta)) {
             throw new RegraDeNegocioException("Já existe outra conta aberta com o mesmo número!");
         }
 
-        contas.add(conta);
+        // 2.6 - Criando o texto que será lançado para adicionar ao DB
+        String sql = "INSERT INTO conta(numero, saldo, cliente_nome, cliente_email)" +
+                "VALUES (?, ?, ?, ?, ?)";
+        
+        Connection connect = connection.returnConnection(); // 2.7 - Pegando nossa Conexão
+        PreparedStatement prepareStatement = connect.prepareStatement(sql); // 2.8 - Passando a nossa String com os placeholder para o PrepareStatemant
+
+        prepareStatement.setInt(1, conta.getNumero());
+        prepareStatement.setBigDecimal(2, BigDecimal.ZERO);
+        prepareStatement.setString(3, dadosDaConta.dadosCliente().nome());
+        prepareStatement.setString(4, dadosDaConta.dadosCliente().cpf());
+        
     }
 
     public void realizarSaque(Integer numeroDaConta, BigDecimal valor) {
