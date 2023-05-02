@@ -2,14 +2,12 @@ package br.com.alura.bytebank.domain.conta;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 
 import br.com.alura.bytebank.ConnectionFactory;
 import br.com.alura.bytebank.domain.RegraDeNegocioException;
-import br.com.alura.bytebank.domain.cliente.Cliente;
 
 public class ContaService {
    

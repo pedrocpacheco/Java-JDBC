@@ -3,9 +3,14 @@ package br.com.alura.bytebank.domain.conta;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.Set;
+
 
 import br.com.alura.bytebank.domain.cliente.Cliente;
+import br.com.alura.bytebank.domain.cliente.DadosCadastroCliente;
 
 public class ContaDAO {
 
@@ -38,6 +43,46 @@ public class ContaDAO {
         catch(SQLException e){
             e.printStackTrace();
         }
+    }
+
+    public Set<Conta> list(){
+        // 1- Criamos uma Lista, nela, os dados que estão no DB serão salvos.
+        Set<Conta> contas = new HashSet<>();
+
+        // 2- Definimos o Texto SQL que será utilizado para pegar todas as contas
+        String sql = "SELECT * FROM conta";
+
+        // 3- Bloco Try-Catch obrigatorio
+        try{
+            
+            // 4- Pegamos o SQL, preparamos em uma Statement, excutamos a Consulta que retorna um ResultList
+            ResultSet listGotted = connection.prepareStatement(sql).executeQuery();
+
+            // 5- Enquanto a lista recuperada tiver itens, nos adicionamos uma Conta a lista de conta
+            while(listGotted.next()){
+
+                // 6- Definimos o numero da conta como o int quetem no indice 1 do DB
+                int accountNumber = listGotted.getInt(1);
+
+                // 7- Definimos os dados DadosCliente dando os seus valores como os valores pegados dentro da listGotted
+                DadosCadastroCliente dadosCliente = new DadosCadastroCliente(listGotted.getString(3), listGotted.getString(4), listGotted.getString(5));
+                
+                // 8- Criamos uma conta, e então adicionamos ela na lista
+                contas.add(new Conta(accountNumber, new Cliente(dadosCliente)));
+         
+        }
+
+        for (Conta conta : contas) {
+            System.out.println(conta.toString());
+        }
+
+        }
+
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+
+        return contas;
     }
 
 
