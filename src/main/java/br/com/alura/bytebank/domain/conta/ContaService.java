@@ -21,7 +21,9 @@ public class ContaService {
     }
 
     public Set<Conta> listarContasAbertas() {
-        return contas;
+        Connection connect = connection.returnConnection();
+        return new ContaDAO(connect).list();
+       
     }
 
     public BigDecimal consultarSaldo(Integer numeroDaConta) {

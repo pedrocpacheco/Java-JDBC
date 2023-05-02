@@ -72,10 +72,6 @@ public class ContaDAO {
          
         }
 
-        for (Conta conta : contas) {
-            System.out.println(conta.toString());
-        }
-
         }
 
         catch(SQLException e){
