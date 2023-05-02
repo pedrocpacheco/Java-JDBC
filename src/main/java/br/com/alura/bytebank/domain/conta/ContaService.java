@@ -7,8 +7,6 @@ import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.mysql.cj.xdevapi.PreparableStatement;
-
 import br.com.alura.bytebank.ConnectionFactory;
 import br.com.alura.bytebank.domain.RegraDeNegocioException;
 import br.com.alura.bytebank.domain.cliente.Cliente;
@@ -51,7 +49,10 @@ public class ContaService {
         prepareStatement.setBigDecimal(2, BigDecimal.ZERO);
         prepareStatement.setString(3, dadosDaConta.dadosCliente().nome());
         prepareStatement.setString(4, dadosDaConta.dadosCliente().cpf());
-        
+        prepareStatement.setString(5, dadosDaConta.dadosCliente().email());
+
+        prepareStatement.execute();
+
     }
 
     public void realizarSaque(Integer numeroDaConta, BigDecimal valor) {
